@@ -27,6 +27,10 @@ apply plugin: "catkin"
 allprojects {
     group "org.ros.android_core"
     version = project.catkin.pkg.version
+    repositories {
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
 }
 
 configure(subprojects.findAll { it.name.startsWith("android_") }) {

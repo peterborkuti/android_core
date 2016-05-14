@@ -17,17 +17,19 @@
 dependencies {
   compile 'org.ros.rosjava_core:rosjava_tutorial_pubsub:[0.2,0.3)'
   compile project(':android_10')
+  compile 'com.android.support:appcompat-v7:23.3.0'
+  compile 'com.github.felHR85:UsbSerial:4.3'
 }
 
 apply plugin: 'com.android.application'
 
 android {
-  compileSdkVersion 10
+  compileSdkVersion 23
 
   defaultConfig {
-    minSdkVersion 10
+    minSdkVersion 17
     applicationId "org.ros.android.android_serial_pubsub"
-    targetSdkVersion 10
+    targetSdkVersion 23
     versionCode 1
     versionName "1.0"
   }
