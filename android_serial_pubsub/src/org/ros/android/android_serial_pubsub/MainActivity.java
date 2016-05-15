@@ -35,7 +35,10 @@ import android.widget.Toast;
 import org.ros.android.MessageCallable;
 import org.ros.android.RosActivity;
 import org.ros.android.view.RosTextView;
+import org.ros.node.DefaultNodeFactory;
+import org.ros.node.Node;
 import org.ros.node.NodeConfiguration;
+import org.ros.node.NodeFactory;
 import org.ros.node.NodeMainExecutor;
 import org.ros.rosjava_tutorial_pubsub.Talker;
 
@@ -154,7 +157,7 @@ public class MainActivity extends RosActivity {
     }
 
     private void initUSB() {
-        usbMessageReceiver = new UsbMessageReceiverImpl();
+        usbMessageReceiver = new UsbMessageReceiverImpl(getApplicationContext());
         mHandler = new MyHandler(this, usbMessageReceiver);
         display = (TextView) findViewById(R.id.textView1);
         editText = (EditText) findViewById(R.id.editText1);
@@ -194,7 +197,8 @@ public class MainActivity extends RosActivity {
         // activity.
         NodeConfiguration nodeConfiguration = NodeConfiguration.newPublic(getRosHostname());
         nodeConfiguration.setMasterUri(getMasterUri());
-        //nodeMainExecutor.execute(talker, nodeConfiguration);
+        nodeMainExecutor.execute(usbMessageReceiver, nodeConfiguration);
+        //nodeMainExecutor.execute(talker, nodeConfigur ation);
         // The RosTextView is also a NodeMain that must be executed in order to
         // start displaying incoming messages.
         nodeMainExecutor.execute(rosTextView, nodeConfiguration);
