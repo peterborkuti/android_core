@@ -2,55 +2,60 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:nestedScrollingEnabled="true">
 
     <org.ros.android.view.RosTextView
         android:id="@+id/text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="30dip" />
+        android:hint="RosText"
+        android:layout_weight="1" />
 
     <TextView
-        android:id="@+id/textViewTitle"
-        android:layout_width="wrap_content"
+        android:id="@+id/textViewFromROS"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/serial_port"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="34dp"
-        android:background="#FFFFFF"
-        android:nestedScrollingEnabled="false"
-        android:scrollIndicators="right" />
+        android:layout_weight="5"
+        android:hint="Messages from ROS"
+        android:background="@android:color/white" />
 
     <EditText
-        android:id="@+id/editText1"
-        android:layout_width="wrap_content"
+        android:id="@+id/editTextToUsb"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_alignRight="@+id/textView1"
-        android:layout_below="@+id/textView1"
-        android:layout_marginTop="28dp"
-        android:ems="10">
-
-        <requestFocus/>
+        android:hint="Test Message To USB"
+        android:layout_weight="1">
     </EditText>
 
     <Button
-        android:id="@+id/buttonSend"
-        style="?borderlessButtonStyle"
-        android:layout_width="wrap_content"
+        android:id="@+id/buttonSendToUSB"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editText1"
-        android:layout_alignRight="@+id/editText1"
-        android:layout_below="@+id/editText1"
-        android:layout_marginTop="42dp"
-        android:text="Send"/>
+        android:text="Send To Usb"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/textViewFromUsb"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="5"
+        android:hint="Messages From USB"
+        android:background="@android:color/white" />
+
+    <EditText
+        android:id="@+id/editTextToROS"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="Test Message To ROS"
+        android:layout_weight="1">
+    </EditText>
+
+    <Button
+        android:id="@+id/buttonSendToROS"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Send To ROS"
+        android:layout_weight="1" />
 
 </LinearLayout>

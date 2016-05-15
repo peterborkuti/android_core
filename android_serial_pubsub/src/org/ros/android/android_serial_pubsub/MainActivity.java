@@ -35,10 +35,7 @@ import android.widget.Toast;
 import org.ros.android.MessageCallable;
 import org.ros.android.RosActivity;
 import org.ros.android.view.RosTextView;
-import org.ros.node.DefaultNodeFactory;
-import org.ros.node.Node;
 import org.ros.node.NodeConfiguration;
-import org.ros.node.NodeFactory;
 import org.ros.node.NodeMainExecutor;
 import org.ros.rosjava_tutorial_pubsub.Talker;
 
@@ -76,8 +73,6 @@ public class MainActivity extends RosActivity {
         }
     };
     private UsbService usbService;
-    private TextView display;
-    private EditText editText;
     private MyHandler mHandler;
     private UsbMessageReceiver usbMessageReceiver;
     private final ServiceConnection usbConnection = new ServiceConnection() {
@@ -96,7 +91,6 @@ public class MainActivity extends RosActivity {
      * USBEND
      **/
     private RosTextView<std_msgs.String> rosTextView;
-    private Talker talker;
 
     public MainActivity() {
         // The RosActivity constructor configures the notification title and ticker
@@ -146,7 +140,7 @@ public class MainActivity extends RosActivity {
 
     private void initTopicFromROS() {
         rosTextView = (RosTextView<std_msgs.String>) findViewById(R.id.text);
-        rosTextView.setTopicName("arduino_output");
+        rosTextView.setTopicName("arduino_input");
         rosTextView.setMessageType(std_msgs.String._TYPE);
         rosTextView.setMessageToStringCallable(new MessageCallable<String, std_msgs.String>() {
             @Override
@@ -157,11 +151,14 @@ public class MainActivity extends RosActivity {
     }
 
     private void initUSB() {
-        usbMessageReceiver = new UsbMessageReceiverImpl(getApplicationContext());
+        TextView display = (TextView) findViewById(R.id.textViewFromUsb);
+        usbMessageReceiver = new UsbMessageReceiver(getApplicationContext(), display);
         mHandler = new MyHandler(this, usbMessageReceiver);
-        display = (TextView) findViewById(R.id.textView1);
-        editText = (EditText) findViewById(R.id.editText1);
-        Button sendButton = (Button) findViewById(R.id.buttonSend);
+    }
+
+    private void initTestUsb() {
+        final EditText editText = (EditText) findViewById(R.id.editTextToUsb);
+        Button sendButton = (Button) findViewById(R.id.buttonSendToUSB);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,6 +172,24 @@ public class MainActivity extends RosActivity {
         });
     }
 
+    private void initTestROS() {
+        final EditText editText = (EditText) findViewById(R.id.editTextToROS);
+        Button sendButton = (Button) findViewById(R.id.buttonSendToROS);
+        /*
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!editText.getText().toString().equals("")) {
+                    String data = editText.getText().toString() + "\n";
+                    if (usbService != null) { // if UsbService was correctly binded, Send data
+                        usbService.write(data.getBytes());
+                    }
+                }
+            }
+        })
+        */;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -184,11 +199,14 @@ public class MainActivity extends RosActivity {
         initTopicFromROS();
 
         initUSB();
+
+        initTestROS();
+
+        initTestUsb();
     }
 
     @Override
     protected void init(NodeMainExecutor nodeMainExecutor) {
-        talker = new Talker();
 
         // At this point, the user has already been prompted to either enter the URI
         // of a master to use or to start a master locally.
@@ -198,7 +216,7 @@ public class MainActivity extends RosActivity {
         NodeConfiguration nodeConfiguration = NodeConfiguration.newPublic(getRosHostname());
         nodeConfiguration.setMasterUri(getMasterUri());
         nodeMainExecutor.execute(usbMessageReceiver, nodeConfiguration);
-        //nodeMainExecutor.execute(talker, nodeConfigur ation);
+
         // The RosTextView is also a NodeMain that must be executed in order to
         // start displaying incoming messages.
         nodeMainExecutor.execute(rosTextView, nodeConfiguration);
@@ -227,7 +245,7 @@ public class MainActivity extends RosActivity {
             switch (msg.what) {
                 case UsbService.MESSAGE_FROM_SERIAL_PORT:
                     String data = (String) msg.obj;
-                    msgReceiver.get().receive(mActivity.get().display, data);
+                    msgReceiver.get().receive(data);
                     break;
                 case UsbService.CTS_CHANGE:
                     Toast.makeText(mActivity.get(), "CTS_CHANGE", Toast.LENGTH_LONG).show();
