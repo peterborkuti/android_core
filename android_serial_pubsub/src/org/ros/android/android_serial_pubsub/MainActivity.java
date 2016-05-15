@@ -26,6 +26,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -174,9 +176,6 @@ public class MainActivity extends RosActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.main);
 
-    // USB
-    mHandler = new MyHandler(this);
-
     rosTextView = (RosTextView<std_msgs.String>) findViewById(R.id.text);
     rosTextView.setTopicName("chatter");
     rosTextView.setMessageType(std_msgs.String._TYPE);
@@ -186,6 +185,24 @@ public class MainActivity extends RosActivity {
         return message.getData();
       }
     });
+
+    // USB
+    mHandler = new MyHandler(this);
+    display = (TextView) findViewById(R.id.textView1);
+    editText = (EditText) findViewById(R.id.editText1);
+    Button sendButton = (Button) findViewById(R.id.buttonSend);
+    sendButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (!editText.getText().toString().equals("")) {
+          String data = editText.getText().toString() + "\n";
+          if (usbService != null) { // if UsbService was correctly binded, Send data
+            usbService.write(data.getBytes());
+          }
+        }
+      }
+    });
+
   }
 
   @Override

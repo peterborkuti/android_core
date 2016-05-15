@@ -2,5 +2,6 @@
 <resources>
 
     <string name="app_name">SerialPubSubTutorial</string>
+    <string name="serial_port">Serial Port</string>
 
 </resources>
