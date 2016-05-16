@@ -19,8 +19,15 @@ import java.util.List;
  * Created by peter on 2016.05.15..
  */
 public class UsbMessageReceiver extends AbstractMessageReceiver {
-    private Context context;
-    private TextView textView;
+    protected Context context;
+    protected TextView textView;
+
+    UsbMessageReceiver(Context context, TextView textView, String topic) {
+        super(topic);
+
+        this.context = context;
+        this.textView = textView;
+    }
 
     UsbMessageReceiver(Context context, TextView textView) {
         super("arduino_output");

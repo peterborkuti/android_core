@@ -5,13 +5,6 @@
     android:orientation="vertical"
     android:nestedScrollingEnabled="true">
 
-    <org.ros.android.view.RosTextView
-        android:id="@+id/text"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:hint="RosText"
-        android:layout_weight="1" />
-
     <TextView
         android:id="@+id/textViewFromROS"
         android:layout_width="fill_parent"

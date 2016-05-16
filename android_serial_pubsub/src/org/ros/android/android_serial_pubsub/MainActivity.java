@@ -32,12 +32,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.ros.android.MessageCallable;
 import org.ros.android.RosActivity;
 import org.ros.android.view.RosTextView;
 import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMainExecutor;
-import org.ros.rosjava_tutorial_pubsub.Talker;
 
 import java.lang.ref.WeakReference;
 import java.util.Set;
@@ -75,6 +73,7 @@ public class MainActivity extends RosActivity {
     private UsbService usbService;
     private MyHandler mHandler;
     private UsbMessageReceiver usbMessageReceiver;
+    private ROSMessageListener rosMessageListener;
     private final ServiceConnection usbConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName arg0, IBinder arg1) {
@@ -139,15 +138,8 @@ public class MainActivity extends RosActivity {
     }
 
     private void initTopicFromROS() {
-        rosTextView = (RosTextView<std_msgs.String>) findViewById(R.id.text);
-        rosTextView.setTopicName("arduino_input");
-        rosTextView.setMessageType(std_msgs.String._TYPE);
-        rosTextView.setMessageToStringCallable(new MessageCallable<String, std_msgs.String>() {
-            @Override
-            public String call(std_msgs.String message) {
-                return message.getData();
-            }
-        });
+        TextView display = (TextView) findViewById(R.id.textViewFromROS);
+        rosMessageListener = new ROSMessageListener(getApplicationContext(), display);
     }
 
     private void initUSB() {
@@ -216,10 +208,10 @@ public class MainActivity extends RosActivity {
         NodeConfiguration nodeConfiguration = NodeConfiguration.newPublic(getRosHostname());
         nodeConfiguration.setMasterUri(getMasterUri());
         nodeMainExecutor.execute(usbMessageReceiver, nodeConfiguration);
-
+        nodeMainExecutor.execute(rosMessageListener, nodeConfiguration);
         // The RosTextView is also a NodeMain that must be executed in order to
         // start displaying incoming messages.
-        nodeMainExecutor.execute(rosTextView, nodeConfiguration);
+        //nodeMainExecutor.execute(rosTextView, nodeConfiguration);
     }
 
     /**
