@@ -12,21 +12,23 @@ public abstract class AbstractMessageReceiver extends AbstractNodeMain implement
     public final String ROS_TOPIC;
     public final String ROS_MSG_TYPE;
     public final String APP_NAME;
+    public final String NODE_PATH;
 
     protected Publisher publisher;
 
-    public AbstractMessageReceiver(String topicName) {
-        this("android_serial_pubsub", topicName);
+    public AbstractMessageReceiver(String nodePath, String topicName) {
+        this("android_serial_pubsub", nodePath, topicName);
     }
 
-    public AbstractMessageReceiver(String appName, String topicName) {
-        this(appName, topicName, "std_msgs/String");
+    public AbstractMessageReceiver(String appName, String nodePath, String topicName) {
+        this(appName, nodePath, topicName, "std_msgs/String");
     }
 
-    public AbstractMessageReceiver(String appName, String topicName, String msgType) {
+    public AbstractMessageReceiver(String appName, String nodePath, String topicName, String msgType) {
         ROS_TOPIC = topicName;
         ROS_MSG_TYPE = msgType;
         APP_NAME = appName;
+        NODE_PATH = nodePath;
     }
 
     public void onStart(ConnectedNode connectedNode) {
@@ -34,6 +36,6 @@ public abstract class AbstractMessageReceiver extends AbstractNodeMain implement
     }
 
     public GraphName getDefaultNodeName() {
-        return GraphName.of(APP_NAME + "/" + ROS_TOPIC);
+        return GraphName.of(APP_NAME + "/" + NODE_PATH);
     }
 }

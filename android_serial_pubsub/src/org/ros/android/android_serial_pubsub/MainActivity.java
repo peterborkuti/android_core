@@ -139,12 +139,12 @@ public class MainActivity extends RosActivity {
 
     private void initTopicFromROS() {
         TextView display = (TextView) findViewById(R.id.textViewFromROS);
-        rosMessageListener = new ROSMessageListener(getApplicationContext(), display);
+        rosMessageListener = new ROSMessageListener(this, getApplicationContext(), display, usbService);
     }
 
     private void initUSB() {
         TextView display = (TextView) findViewById(R.id.textViewFromUsb);
-        usbMessageReceiver = new UsbMessageReceiver(getApplicationContext(), display);
+        usbMessageReceiver = new UsbMessageReceiver(this, getApplicationContext(), display);
         mHandler = new MyHandler(this, usbMessageReceiver);
     }
 
@@ -167,19 +167,18 @@ public class MainActivity extends RosActivity {
     private void initTestROS() {
         final EditText editText = (EditText) findViewById(R.id.editTextToROS);
         Button sendButton = (Button) findViewById(R.id.buttonSendToROS);
-        /*
+
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!editText.getText().toString().equals("")) {
                     String data = editText.getText().toString() + "\n";
-                    if (usbService != null) { // if UsbService was correctly binded, Send data
-                        usbService.write(data.getBytes());
+                    if (usbMessageReceiver != null) { // if UsbService was correctly binded, Send data
+                        usbMessageReceiver.receive(data);
                     }
                 }
             }
-        })
-        */;
+        });
     }
 
     @SuppressWarnings("unchecked")
