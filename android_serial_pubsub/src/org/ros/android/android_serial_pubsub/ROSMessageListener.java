@@ -24,6 +24,10 @@ public class ROSMessageListener extends UsbMessageReceiver {
         this.usbService = usbService;
     }
 
+    public void setUsbService(UsbService service) {
+        usbService = service;
+    }
+
     @Override
     public void onStart(ConnectedNode connectedNode) {
         Subscriber<String> subscriber = connectedNode.newSubscriber(ROS_TOPIC, std_msgs.String._TYPE);

@@ -59,8 +59,8 @@ public class UsbMessageReceiver extends AbstractMessageReceiver {
         public void run() {
             List<String> lines = new ArrayList<String>();
             lines.add(message);
-            lines.addAll(Arrays.asList(view.getText().toString().split("\n", 5)));
-            String line = StringUtils.join(lines, "\n");
+            lines.addAll(Arrays.asList(view.getText().toString().split("\n")));
+            String line = StringUtils.join(lines.subList(0, Math.min(5, lines.size())), "\n");
             view.setText(line);
         }
     }

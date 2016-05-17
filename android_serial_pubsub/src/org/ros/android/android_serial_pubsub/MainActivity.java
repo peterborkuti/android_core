@@ -79,11 +79,13 @@ public class MainActivity extends RosActivity {
         public void onServiceConnected(ComponentName arg0, IBinder arg1) {
             usbService = ((UsbService.UsbBinder) arg1).getService();
             usbService.setHandler(mHandler);
+            rosMessageListener.setUsbService(usbService);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
             usbService = null;
+            rosMessageListener.setUsbService(usbService); //is it superfluous?
         }
     };
     /**
